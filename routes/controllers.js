@@ -27,14 +27,18 @@ router.get("/scrape", function (req, res) {
 });
 
 router.get('/articles', function(req, res){
-    db.article.find({saved: false}).then(function(articles){
+    db.Article.find({saved: false}).then(function(articles){
         res.render('articlelist', {articles: articles });
     }).catch(function(err){
         res.json(err);
     });
 });
 
-
+router.get('/saved', function(req, res){
+    db.Article.find({ saved: true }).populate('notes').exec(function(error, articles) {
+        res.render('saved', { articles: articles });
+    });
+});
 
 
 module.exports = router;
